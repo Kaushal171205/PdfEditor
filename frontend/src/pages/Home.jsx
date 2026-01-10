@@ -1,4 +1,4 @@
-import { useRef , useState} from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import styles from './Home.module.css'
 
@@ -11,7 +11,7 @@ export default function Home() {
     const file = e.target.files[0]
     if (file && file.type === 'application/pdf') {
       setPdfFile(file)
-      navigate('/editor',{ state: { pdfFile : file} })
+      // Show modal instead of navigating immediately
     } else {
       alert('Please upload a valid PDF file')
     }
@@ -23,11 +23,21 @@ export default function Home() {
     const file = e.dataTransfer.files[0]
 
     if (file && file.type === 'application/pdf') {
-      navigate('/editor',{state:{ pdfFile}})
+      setPdfFile(file)
     } else {
       alert('Only PDF files are allowed')
     }
   }
+
+  const handleEditorChoice = (type) => {
+    if (!pdfFile) return;
+
+    if (type === 'visual') {
+      navigate('/editor', { state: { pdfFile } });
+    } else {
+      navigate('/code-editor', { state: { pdfFile } });
+    }
+  };
 
   return (
     <section className={styles.home}>
@@ -62,6 +72,41 @@ export default function Home() {
             onChange={handleFileChange}
           />
         </div>
+
+        {/* Editor Choice Modal */}
+        {pdfFile && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <h3>Choose Editor Mode</h3>
+              <p>How would you like to edit <strong>{pdfFile.name}</strong>?</p>
+
+              <div className={styles.modalActions}>
+                <button
+                  className={styles.primaryBtn}
+                  onClick={() => handleEditorChoice('visual')}
+                >
+                  Visual Editor
+                  <span>Drag & Drop, WYSIWYG</span>
+                </button>
+
+                <button
+                  className={styles.secondaryBtn}
+                  onClick={() => handleEditorChoice('code')}
+                >
+                  Code Editor
+                  <span>Edit markup directly</span>
+                </button>
+              </div>
+
+              <button
+                className={styles.cancelBtn}
+                onClick={() => setPdfFile(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Actions */}
         <div className={styles.actions}>

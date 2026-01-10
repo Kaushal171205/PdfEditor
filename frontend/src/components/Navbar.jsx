@@ -33,6 +33,15 @@ export default function Navbar() {
         </NavLink>
 
         <NavLink
+          to="/code-editor"
+          className={({ isActive }) =>
+            isActive ? styles.active : styles.link
+          }
+        >
+          Code Editor
+        </NavLink>
+
+        <NavLink
           to="/convert"
           className={({ isActive }) =>
             isActive ? styles.active : styles.link
