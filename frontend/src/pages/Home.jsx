@@ -128,7 +128,7 @@ export default function Home() {
         />
 
         <Feature
-          title="PDF ↔ Excel Conversion"
+          title="PDF ↔ Word(.docx) Conversion"
           description="Convert documents without breaking layouts or data integrity."
         />
 
